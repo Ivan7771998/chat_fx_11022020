@@ -44,17 +44,33 @@ public class Server {
         }
     }
 
-    public void broadcastMsg(String msg){
-        for (ClientHandler c: clients ) {
-            c.sendMsg(msg);
+    public void broadcastMsg(String fromWhom, String toWhom, String msg) {
+        if (toWhom.equals("all")) {
+            for (ClientHandler c : clients) {
+                if(fromWhom.equals(c.getNick())) {
+                   String[] noName = msg.split(" : ");
+                   c.sendMsg(noName[1]);
+                }else {
+                    c.sendMsg(msg);
+                }
+            }
+        } else {
+            for (ClientHandler c : clients) {
+                if(fromWhom.equals(c.getNick())){
+                    c.sendMsg(msg);
+                }
+                if (toWhom.equals(c.getNick())) {
+                    c.sendMsg(toWhom + " : " + msg);
+                }
+            }
         }
     }
 
-    public void subscribe(ClientHandler clientHandler){
+    public void subscribe(ClientHandler clientHandler) {
         clients.add(clientHandler);
     }
 
-    public void unsubscribe(ClientHandler clientHandler){
+    public void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
     }
 }

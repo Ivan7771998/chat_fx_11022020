@@ -10,6 +10,7 @@ public class ClientHandler {
     DataInputStream in;
     DataOutputStream out;
     Server server;
+
     private String nick;
     private String login;
 
@@ -51,7 +52,7 @@ public class ClientHandler {
                             out.writeUTF("/end");
                             break;
                         }
-                        server.broadcastMsg(str);
+                        sendAllOrIndividual(server, str);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -81,6 +82,20 @@ public class ClientHandler {
             e.printStackTrace();
         }
 
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    private void sendAllOrIndividual(Server server, String str) {
+        String[] strData = str.split(" : ", 2);
+        if (strData[1].startsWith("/w ")) {
+            String[] dataToIndividual = strData[1].split(" ", 3);
+            server.broadcastMsg(strData[0], dataToIndividual[1], dataToIndividual[2]);
+        } else {
+            server.broadcastMsg(strData[0], "all", str);
+        }
     }
 
     public void sendMsg(String msg) {
