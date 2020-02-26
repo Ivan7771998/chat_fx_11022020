@@ -140,7 +140,7 @@ public class Controller implements Initializable {
                     System.out.println("Сервер отключился");
                     setAuthenticated(false);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("Клиент отключен по time out!");
                 } finally {
                     try {
                         socket.close();
